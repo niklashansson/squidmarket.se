@@ -1,7 +1,7 @@
 import 'swiper/css';
 
 import { Swiper } from 'swiper';
-import { Navigation } from 'swiper/modules';
+import { Manipulation, Navigation } from 'swiper/modules';
 
 export const globalSwiper = function () {
   const listElements = Array.from(document.querySelectorAll('[swiper="component"]'));
@@ -18,6 +18,7 @@ export const globalSwiper = function () {
     const btnPrev = component.querySelector('.swiper-prev');
 
     return {
+      componentEl: component,
       instance: instance,
       btnNext: btnNext,
       btnPrev: btnPrev,
@@ -30,13 +31,11 @@ export const globalSwiper = function () {
   });
 
   function newSwiper(component) {
-    const options = component.instance.getAttribute('swiper-options') || 1;
-
-    console.log(component);
+    const options = component.componentEl.getAttribute('swiper-options') || 1;
 
     const optionVariants = [
       {
-        modules: [Navigation],
+        modules: [Navigation, Manipulation],
         speed: 800,
         loop: false,
         grabCursor: true,
@@ -66,10 +65,66 @@ export const globalSwiper = function () {
           },
         },
       },
+      {
+        modules: [Navigation, Manipulation],
+        speed: 800,
+        loop: false,
+        grabCursor: true,
+        spaceBetween: 0,
+        centeredSlides: false,
+        slidesPerView: 1,
+        preventClicksPropagation: false,
+        initialSlide: 0,
+        navigation: {
+          nextEl: component.btnNext,
+          prevEl: component.btnPrev,
+        },
+        breakpoints: {
+          // when window width is >= 320px
+          320: {
+            slidesPerView: 1,
+            spaceBetween: 0,
+          },
+          // when window width is >= 480px
+          768: {
+            slidesPerView: 1,
+            spaceBetween: 0,
+          },
+          // when window width is >= 992px
+          992: {
+            slidesPerView: 1,
+            spaceBetween: 0,
+          },
+        },
+      },
     ];
 
-    const swiper = new Swiper(component.instance, optionVariants[options - 1]);
+    // Creates swiper if there are elements/nodes in swiper wrapper
+    if (component.instance.querySelector('.swiper-wrapper').children.length > 1) {
+      const swiper = new Swiper(component.instance, optionVariants[options - 1]);
 
-    swiper.init();
+      // Adds the thumbnail/main image to swiper on product page
+      if (options === '2') {
+        const productThumb = component.componentEl.querySelector('[swiper="product-2-thumbnail"]');
+        if (!productThumb) return;
+
+        swiper.prependSlide(productThumb);
+        swiper.update();
+        swiper.slidePrev(0, false);
+
+        return;
+      }
+    }
+
+    // if no swiper was created - remove arrows and show thumbnail
+    if (options === '2') {
+      const thumbnailWrap = component.componentEl.querySelector(
+        '[swiper="product-2-thumbnail-wrap"]'
+      );
+      const arrowsWrap = component.componentEl.querySelector('[swiper="product-2-arrows-wrap"]');
+
+      arrowsWrap.remove();
+      thumbnailWrap.style.display = 'block';
+    }
   }
 };

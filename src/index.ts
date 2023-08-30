@@ -7,4 +7,4 @@ window.Webflow.push(() => {
   // swiper();
 });
 
-/*https://cdn.jsdelivr.net/gh/niklashansson/squidmarket.se@fa470167854f9cd52c0c9dd387d9b88da9d001d6/dist/index.js*/
+/*<script defer src="https://cdn.jsdelivr.net/gh/niklashansson/squidmarket.se@32c821455da99bb416341948ff5ce0faf9abe1a6/dist/index.js"></script>*/

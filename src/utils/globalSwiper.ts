@@ -100,7 +100,7 @@ export const globalSwiper = function () {
     ];
 
     // Creates swiper if there are elements/nodes in swiper wrapper
-    if (component.instance.querySelector('.swiper-wrapper').children.length > 1) {
+    if (component.instance.querySelector('.swiper-wrapper').children.length >= 1) {
       const swiper = new Swiper(component.instance, optionVariants[options - 1]);
 
       // Adds the thumbnail/main image to swiper on product page
